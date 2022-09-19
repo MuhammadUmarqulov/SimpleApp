@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
-using SimpleApp.Exceptions;
-using System.Threading.Tasks;
+﻿using SimpleApp.Exceptions;
 
 namespace SimpleApp
 {

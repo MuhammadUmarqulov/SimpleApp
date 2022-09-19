@@ -42,6 +42,7 @@ builder.Services.AddSwaggerGen(swagger =>
         In = ParameterLocation.Header,
         Description = "Enter ‘Bearer’ [space] and then your valid token in the text input below.\r\n\r\nExample: \"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\"",
     });
+
     swagger.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {
@@ -68,7 +69,8 @@ builder.Services.AddDbContext<SimpleDbContexts>(
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
 {
     options.TokenValidationParameters = new TokenValidationParameters
     {
@@ -77,13 +79,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
         ValidIssuer = builder.Configuration["JWT:Issuer"],
-        ValidAudience = builder.Configuration["JWT:Issuer"],
-        IssuerSigningKey = new
-        SymmetricSecurityKey
-        (Encoding.UTF8.GetBytes
-        (builder.Configuration["JWT:Key"]))
+        ValidAudience = builder.Configuration["JWT:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]))
     };
 });
+
+builder.Services.AddAuthorization();
 
 
 var app = builder.Build();
